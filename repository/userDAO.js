@@ -1,0 +1,102 @@
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb')
+const { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand, UpdateCommand } = require('@aws-sdk/lib-dynamodb')
+
+const client = new DynamoDBClient({region: 'us-east-1'})
+
+const documentClient = DynamoDBDocumentClient.from(client)
+
+
+class User {
+    constructor(user_id, username, password, is_manager) {
+        this.user_id = user_id,
+        this.username = username,
+        this.password = password,
+        this.is_manager = is_manager
+    }
+}
+
+async function createUser(user){
+    const command = new PutCommand({
+        TableName: 'Users',
+        Item: user
+    })
+
+    try{
+        await documentClient.send(command)
+        return item
+    }catch(err){
+        console.error(err)
+        return null
+    }
+}
+
+async function getUser(user_id){
+    const command = new GetCommand({
+        TableName: 'Users',
+        Key: {user_id}
+    });
+
+    try{
+        const data = await documentClient.send(command);
+        return data.Item;
+    }catch(err){
+        console.error(err);
+        return null;
+    }
+}
+
+async function getUsers(){
+    const command = new ScanCommand({
+        TableName: 'Users'
+    })
+
+    try{
+        const data = await documentClient.send(command)
+        return data.Items
+    }catch(err){
+        console.error(err)
+        return null
+    }
+}
+
+async function deleteUser(user_id){
+    const command = new DeleteCommand({
+        TableName: "Users",
+        Key: {user_id}
+    });
+
+    try{
+        await documentClient.send(command);
+        return user_id;
+    }catch(err){
+        console.error(err);
+        return null;
+    }
+}
+
+async function updateUser(user_id){
+    const command = new UpdateCommand({
+        TableName: 'Users',
+        Key: {item_name},
+        UpdateExpression: "set is_manager = :i_m",
+        ExpressionAttributeValues: {":i_m": true}
+    })
+
+
+    try{
+        await documentClient.send(command)
+        return user_id
+    }catch(err){
+        console.error(err)
+        return null
+    }
+}
+
+module.exports = {
+    User,
+    createUser,
+    getUser,
+    getUsers,
+    deleteUser,
+    updateUser
+}
