@@ -56,7 +56,7 @@ async function getUserByUsername(username){
 
     try{
         const data = await documentClient.send(command)
-        return data.Item
+        return data.Items
     }catch(err){
         console.error(err)
         return null

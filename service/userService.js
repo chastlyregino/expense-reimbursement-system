@@ -6,9 +6,9 @@ async function createUser(user_id, username, password){
     const result = await userDAO.createUser(user)
 
     if(!result){
-        return {message: 'Failed to create item'}
+        return {message: 'Failed to create user'}
     }else{
-        return {message: 'Created item', user: result}
+        return {message: 'Created user', user: result}
     }
 }
 
@@ -16,19 +16,19 @@ async function getUser(user_id){
     const result = await userDAO.getUser(user_id)
 
     if(!result){
-        return {message: "Failed to get user", user_id}
+        return {message: 'Failed to get user', user_id}
     }else{
-        return {message: "Found user",user_id, user: result}
+        return {message: 'Found user', user_id, user: result}
     }
 }
 
 async function getUserByUsername(username){
     const result = await userDAO.getUserByUsername(username)
-
+    
     if(!result){
-        return {message: "Failed to get user", username}
+        return {message: 'Failed to get user', username}
     }else{
-        return {message: "Found user",username, user: result}
+        return {message: 'Found user', username, user: result}
     }
 }
 
@@ -56,9 +56,9 @@ async function updateUser(user_id){
     const result = await userDAO.updateUser(user_id)
 
     if(!result){
-        return {message: "Failed to update user", user_id}
+        return {message: 'Failed to update user', user_id}
     }else{
-        return {message: "User updates", result}
+        return {message: 'User updates', result}
     }
 }
 
