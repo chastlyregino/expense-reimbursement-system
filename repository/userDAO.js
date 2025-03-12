@@ -1,5 +1,5 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb')
-const { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand, UpdateCommand } = require('@aws-sdk/lib-dynamodb')
+const { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand, UpdateCommand, GetCommand, QueryCommand } = require('@aws-sdk/lib-dynamodb')
 
 const client = new DynamoDBClient({region: 'us-east-1'})
 
@@ -18,12 +18,12 @@ class User {
 async function createUser(user){
     const command = new PutCommand({
         TableName: 'Users',
-        Item: user
+        Item: user,
     })
 
     try{
         await documentClient.send(command)
-        return item
+        return user
     }catch(err){
         console.error(err)
         return null
@@ -33,21 +33,39 @@ async function createUser(user){
 async function getUser(user_id){
     const command = new GetCommand({
         TableName: 'Users',
-        Key: {user_id}
-    });
+        Key: { user_id },
+    })
 
     try{
         const data = await documentClient.send(command);
-        return data.Item;
+        return data.Item
     }catch(err){
-        console.error(err);
-        return null;
+        console.error(err)
+        return null
+    }
+}
+
+async function getUserByUsername(username){
+    const command = new ScanCommand({
+        TableName: 'Users',
+        FilterExpression: 'username = :un',
+        ExpressionAttributeValues: {
+            ':un': username
+        }
+    })
+
+    try{
+        const data = await documentClient.send(command)
+        return data.Item
+    }catch(err){
+        console.error(err)
+        return null
     }
 }
 
 async function getUsers(){
     const command = new ScanCommand({
-        TableName: 'Users'
+        TableName: 'Users',
     })
 
     try{
@@ -62,7 +80,7 @@ async function getUsers(){
 async function deleteUser(user_id){
     const command = new DeleteCommand({
         TableName: "Users",
-        Key: {user_id}
+        Key: {user_id},
     });
 
     try{
@@ -77,9 +95,9 @@ async function deleteUser(user_id){
 async function updateUser(user_id){
     const command = new UpdateCommand({
         TableName: 'Users',
-        Key: {item_name},
+        Key: {user_id},
         UpdateExpression: "set is_manager = :i_m",
-        ExpressionAttributeValues: {":i_m": true}
+        ExpressionAttributeValues: {":i_m": true},
     })
 
 
@@ -98,5 +116,6 @@ module.exports = {
     getUser,
     getUsers,
     deleteUser,
-    updateUser
+    updateUser,
+    getUserByUsername,
 }

@@ -3,7 +3,7 @@ const userDAO = require('../repository/userDAO.js')
 async function createUser(user_id, username, password){
     const user = new userDAO.User(user_id, username, password, false)
 
-    const result = await userDAO.createItem(user);
+    const result = await userDAO.createUser(user)
 
     if(!result){
         return {message: 'Failed to create item'}
@@ -13,17 +13,28 @@ async function createUser(user_id, username, password){
 }
 
 async function getUser(user_id){
-    const result = await userDAO.getUser(user_id);
+    const result = await userDAO.getUser(user_id)
 
     if(!result){
-        return {message: "Failed to get user", user_id};
+        return {message: "Failed to get user", user_id}
     }else{
         return {message: "Found user",user_id, user: result}
     }
 }
 
+async function getUserByUsername(username){
+    const result = await userDAO.getUserByUsername(username)
+
+    if(!result){
+        return {message: "Failed to get user", username}
+    }else{
+        return {message: "Found user",username, user: result}
+    }
+}
+
 async function getUsers(){
     const result = await userDAO.getUsers()
+
     if(!result){
         return {message: 'Failed to get users'}
     }else{
@@ -42,10 +53,10 @@ async function deleteUser(user_id){
 }
 
 async function updateUser(user_id){
-    const result = await userDAO.updateUser(user_id);
+    const result = await userDAO.updateUser(user_id)
 
     if(!result){
-        return {message: "Failed to update user", user_id};
+        return {message: "Failed to update user", user_id}
     }else{
         return {message: "User updates", result}
     }
@@ -56,5 +67,6 @@ module.exports = {
     getUser,
     getUsers,
     deleteUser,
-    updateUser
+    updateUser,
+    getUserByUsername,
 }
