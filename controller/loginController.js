@@ -11,7 +11,7 @@ const validateUserMiddleware = (req, res, next) => {
 
     if(!username || !password) {
         logger.info(`POST method failed! Missing info`)
-        res.status(400).json({error: `Please provide a username and password`})
+        res.status(400).json({error: `Please provide a valid username and password`})
     } else {
         userService.getUserByUsername(username)
         .then(data => {
@@ -37,15 +37,11 @@ const router = express.Router()
 
 //POST login
 router.post(`/`, validateUserMiddleware, (req, res) => {
-
     const data = res.locals.data
     res.status(200).json({
         message: `Login Successful!`,
         data
-    })
-                   
+    })       
 })
-
-
 
 module.exports = router
