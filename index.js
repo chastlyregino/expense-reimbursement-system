@@ -11,7 +11,12 @@ const PORT = 3000
 
 //let user = userService.getUsers()
 //logger.info(`this is how to use logger`)
+function loggerMiddleware(req, res, next){
+    logger.info(`Incoming ${req.method} : ${req.url}`)
+    next()
+}
 
+app.use(loggerMiddleware)
 app.use(express.json())
 
 app.use(`/register`, registerController)

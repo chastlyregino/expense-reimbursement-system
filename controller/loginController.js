@@ -6,8 +6,17 @@ const router = express.Router()
 
 //POST login
 
-router.post("/", (req, res) => {
+router.post("/", validateUserMiddleware, (req, res) => {
 
+    const data = res.locals.data
+    res.status(200).json({
+        message: `Login Successful!`,
+        data
+    })
+                   
+})
+
+function validateUserMiddleware(req, res, next){
     const { username, password } = req.body
 
     if(!username || !password) {
@@ -17,12 +26,10 @@ router.post("/", (req, res) => {
         userService.getUserByUsername(username)
         .then(data => {
             if(data.user[0]) {
-                if(data.user[0].password === password) {
-                    res.status(200).json({
-                        message: `Login Successful!`,
-                        data
-                    })
+                if(matchUserCredentials(data.user[0], password)) {
                     logger.info(`Login Successful! ${data.user.username}`)
+                    res.locals.data = { key: data }
+                    next()
                 } else {
                     logger.info(`Mismatch password ${username}`)
                     res.status(400).json({error: `Login failed!`})
@@ -34,6 +41,12 @@ router.post("/", (req, res) => {
         })
         .catch(err => console.error(err))
     }
-})
+
+
+};
+
+function matchUserCredentials(data, password){
+    return data.password === password
+}
 
 module.exports = router
