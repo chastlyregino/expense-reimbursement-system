@@ -1,9 +1,9 @@
-const express = require('express')
-const { logger } = require('./util/logger.js')
-const userService = require('./service/userService.js')
-const userDAO = require('./repository/userDAO.js')
-const loginController = require('./controller/loginController.js')
-const registerController = require('./controller/registerController.js')
+const express = require(`express`)
+const { logger } = require(`./util/logger.js`)
+const userService = require(`./service/userService.js`)
+const userDAO = require(`./repository/userDAO.js`)
+const loginController = require(`./controller/loginController.js`)
+const registerController = require(`./controller/registerController.js`)
 
 
 const app = express()
@@ -11,7 +11,7 @@ const PORT = 3000
 
 //let user = userService.getUsers()
 //logger.info(`this is how to use logger`)
-function loggerMiddleware(req, res, next){
+const loggerMiddleware = (req, res, next) => {
     logger.info(`Incoming ${req.method} : ${req.url}`)
     next()
 }

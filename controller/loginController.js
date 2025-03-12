@@ -1,12 +1,12 @@
-const express = require("express")
-const { logger } = require('../util/logger.js')
-const userService = require('../service/userService.js')
+const express = require(`express`)
+const { logger } = require(`../util/logger.js`)
+const userService = require(`../service/userService.js`)
 
 const router = express.Router()
 
 //POST login
 
-router.post("/", validateUserMiddleware, (req, res) => {
+router.post(`/`, validateUserMiddleware, (req, res) => {
 
     const data = res.locals.data
     res.status(200).json({
@@ -16,7 +16,7 @@ router.post("/", validateUserMiddleware, (req, res) => {
                    
 })
 
-function validateUserMiddleware(req, res, next){
+const validateUserMiddleware = (req, res, next) => {
     const { username, password } = req.body
 
     if(!username || !password) {
@@ -41,11 +41,9 @@ function validateUserMiddleware(req, res, next){
         })
         .catch(err => console.error(err))
     }
+}
 
-
-};
-
-function matchUserCredentials(data, password){
+const matchUserCredentials = (data, password) => {
     return data.password === password
 }
 
