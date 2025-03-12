@@ -2,19 +2,9 @@ const express = require(`express`)
 const { logger } = require(`../util/logger.js`)
 const userService = require(`../service/userService.js`)
 
-const router = express.Router()
-
-//POST login
-
-router.post(`/`, validateUserMiddleware, (req, res) => {
-
-    const data = res.locals.data
-    res.status(200).json({
-        message: `Login Successful!`,
-        data
-    })
-                   
-})
+const matchUserCredentials = (data, password) => {
+    return data.password === password
+}
 
 const validateUserMiddleware = (req, res, next) => {
     const { username, password } = req.body
@@ -43,8 +33,19 @@ const validateUserMiddleware = (req, res, next) => {
     }
 }
 
-const matchUserCredentials = (data, password) => {
-    return data.password === password
-}
+const router = express.Router()
+
+//POST login
+router.post(`/`, validateUserMiddleware, (req, res) => {
+
+    const data = res.locals.data
+    res.status(200).json({
+        message: `Login Successful!`,
+        data
+    })
+                   
+})
+
+
 
 module.exports = router
