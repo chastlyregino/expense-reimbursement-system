@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require("bcryptjs")
 const { logger } = require(`../util/logger.js`)
 const { authenticateToken } = require('../util/jwt')
-const userService = require(`../service/ticketService.js`)
+const ticketService = require(`../service/ticketService.js`)
 
 
 const router = express.Router()
