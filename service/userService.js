@@ -1,51 +1,80 @@
 const userDAO = require(`../repository/userDAO.js`)
+const uuid = require(`uuid`)
 
-const createUser= async (user_id, username, password) => {
-    const user = new userDAO.User(user_id, username, password, false)
+const createUserObject = (username, password) => {
+    return new userDAO.User(uuid.v4(), username, password, false)
+}
 
-    const result = await userDAO.createUser(user)
-
-    if(!result) {
-        return {message: `Failed to create user`}
+const validateUserData = (user) => {
+    if(!user.username || !user.password) {
+        return null
     } else {
-        return {message: `Created user`, user: result}
+        return user
     }
 }
 
-const getUser = async (user_id) => {
-    const result = await userDAO.getUser(user_id)
-
-    if(!result) {
-        return {message: `Failed to get user`, user_id}
+const validateUserCredentials = async (user) => {
+    const existingUser = await getUserByUsername(user.username)
+    
+    if(!existingUser) {
+        return null
     } else {
-        return {message: `Found user`, user_id, user: result}
+        return existingUser
+    }
+}
+const createUser = async (user) => {
+    const userObject = createUserObject(user.username, user.password)
+
+    const userCreated = await userDAO.createUser(userObject)
+        
+    if(!userCreated) {
+        return null
+    } else {
+        return userCreated
+    }
+    
+}
+
+const getUser = async (user_id) => {
+    if(username){
+        const user = await userDAO.getUser(user_id)
+        if(user){
+            return user
+        }else{
+            return null
+        }
+    }{
+        return null
     }
 }
 
 const getUserByUsername = async (username) => {
-    const result = await userDAO.getUserByUsername(username)
-    
-    if(!result) {
-        return {message: `Failed to get user`, username}
-    } else {
-        return {message: `Found user`, username, user: result}
+    if(username){
+        const user = await userDAO.getUserByUsername(username)
+        if(user){
+            return user[0]
+        }else{
+            return null
+        }
+    }{
+        return null
     }
 }
 
 const getUsers = async () => {
-    const result = await userDAO.getUsers()
+    const user = await userDAO.getUsers()
 
-    if(!result) {
+    if(!user) {
         return {message: `Failed to get users`}
     } else {
-        return {message: `Found users:`, result}
+        return user
     }
 }
 
 const deleteUser = async (user_id) => {
-    const result = await userDAO.deleteUser(user_id)
+    const user = await userDAO.deleteUser(user_id)
 
-    if(!result) {
+    if(!user) {
         return {message: `Failed to delete user`, user_id}
     } else {
         return {message: `Deleted user`, user_id}
@@ -53,9 +82,9 @@ const deleteUser = async (user_id) => {
 }
 
 const updateUser = async (user_id) => {
-    const result = await userDAO.updateUser(user_id)
+    const user = await userDAO.updateUser(user_id)
 
-    if(!result) {
+    if(!user) {
         return {message: `Failed to update user`, user_id}
     } else {
         return {message: `User updates`, result}
@@ -69,4 +98,7 @@ module.exports = {
     deleteUser,
     updateUser,
     getUserByUsername,
+    validateUserCredentials,
+    validateUserData,
+    createUserObject,
 }

@@ -2,8 +2,7 @@ const express = require(`express`)
 const { logger } = require(`./util/logger.js`)
 const userService = require(`./service/userService.js`)
 const userDAO = require(`./repository/userDAO.js`)
-const loginController = require(`./controller/loginController.js`)
-const registerController = require(`./controller/registerController.js`)
+const userController = require(`./controller/userController.js`)
 
 
 const app = express()
@@ -19,8 +18,9 @@ const loggerMiddleware = (req, res, next) => {
 app.use(loggerMiddleware)
 app.use(express.json())
 
-app.use(`/register`, registerController)
-app.use(`/login`, loginController)
+app.use(`/users`, userController)
+// app.use(`/register`, registerController)
+// app.use(`/login`, loginController)
 
 //POST ticket submission
 
