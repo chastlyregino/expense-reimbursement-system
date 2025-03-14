@@ -41,14 +41,14 @@ const createUser = async (user) => {
 }
 
 const getUser = async (user_id) => {
-    if(username){
+    if(user_id){
         const user = await userDAO.getUser(user_id)
         if(user){
             return user
         }else{
             return null
         }
-    }{
+    } else {
         return null
     }
 } // to test
