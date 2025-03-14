@@ -18,21 +18,6 @@ const authenticateToken = async (req, res, next) => {
         next()
     }
 }
-
-const destroyToken = async (req, res, next) => {
-
-    // authorization: "Bearer tokenstring"
-    const authHeader = req.headers[`authorization`];
-    const token = authHeader && authHeader.split(` `)[1]
-
-    if(!token) {
-        res.status(403).json({message: `Forbidden Access`})
-    } else {
-        await destroyJWT(token)
-        next()
-    }
-}
-
 const decodeJWT = async (token) => {
     try {
         const user = await jwt.verify(token, secretKey)
@@ -42,16 +27,6 @@ const decodeJWT = async (token) => {
     }
 }
 
-const destroyJWT = async (token) => {
-    try {
-        const user = await jwt.destroy(token, secretKey)
-        return user
-    } catch(err) {
-        logger.error(err)
-    }
-}
-
 module.exports = {
-    authenticateToken,
-    destroyToken
+    authenticateToken
 }

@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require(`express`)
 const jwt = require('jsonwebtoken')
 const userService = require(`../service/userService.js`)
-const { destroyToken } = require("../util/jwt")
 
 const router = express.Router()
 
@@ -72,14 +71,6 @@ router.post(`/login`, validateUserData, validateUserLogin, async (req, res) => {
         res.status(200).json({message: `Login Successful!`, token})
     }else{
         res.status(400).json({message: `Invalid Login!`, data: req.body})
-    }
-})
-
-router.get("/logout", destroyToken, (req, res) => {
-    if(!res.locals.user){
-        res.status(200).json({message: `Logout Successful!`})
-    }else{
-        res.status(400).json({message: `Invalid Logout!`, data: res.locals.user})
     }
 })
 
