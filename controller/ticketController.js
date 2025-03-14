@@ -19,12 +19,20 @@ const validateUserID = async (req, res, next) => {
     }
 }
 
+const validateIfManager = async (req, res, next) => {
+    if(res.locals.user.userData.is_manager) {
+        next()
+    } else {
+        res.status(403).json({message: `Forbidden Access`})
+    }
+}
+
 const validateTicketData = async (req, res, next) => {
     let ticket = req.body
     ticket.user_id = res.locals.user.userData.user_id
 
     if(!ticketService.validateTicketData(ticket)) {
-        res.status(400).json({message: `Invalid ticket details`, data: ticket})
+        res.status(400).json({message: `Invalid ticket details`, ticket: ticket})
     } else {
         next()
     }
@@ -39,19 +47,39 @@ router.post(`/create`, validateUserID, validateTicketData, async (req, res) => {
     if(data){
         res.status(201).json({message: `Created Ticket ${JSON.stringify(req.body)}`})
     }else{
-        res.status(400).json({message: `Ticket not created`, data: req.body})
+        res.status(400).json({message: `Ticket not created`, ticket: req.body})
     }
 })
 //GET previous tickets (employee)
 router.get(`/history`, validateUserID, async (req, res) => {
     const currentUser_id = res.locals.user.userData.user_id
     const data = await ticketService.getTicketsByUserID(currentUser_id)
-    res.json({message: `Tickets available here!`, user: data})
+    if(data) {
+        res.status(200).json({message: `Tickets available here!`, ticket: data})
+    } else {
+        res.status(204).json({message: `No tickets found`})
+    }
 })
 
 //GET pending tickets (manager)
+router.get(`/history/pending`, validateUserID, validateIfManager, async (req, res) => {
+    const data = await ticketService.getTicketsByStatus()
+    if(data) {
+        res.status(200).json({message: `Tickets available here!`, ticket: data})
+    } else {
+        res.status(204).json({message: `No tickets found`})
+    }
+})
 
 //PUT approve/deny ticket
-
+router.put(`/history/pending/change-status`, validateUserID, validateIfManager, async (req, res) => {
+    const ticket = req.body
+    const data = await ticketService.updateTicketStatusByTicketID(ticket.ticket_id, ticket.ticket_status)
+    if(data) {
+        res.status(200).json({message: `Ticket updated!`, ticket: data})
+    } else {
+        res.status(400).json({message: `Ticket not updated`, ticket: req.body})
+    }
+})
 
 module.exports = router

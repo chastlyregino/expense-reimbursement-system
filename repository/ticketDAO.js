@@ -76,7 +76,7 @@ const getTicketsByStatus = async () => {
         TableName: `Tickets`,
         FilterExpression: `ticket_status = :ts`,
         ExpressionAttributeValues: {
-            ':ts': `pending`,
+            ':ts': 'pending',
         }
     })
 
@@ -93,7 +93,7 @@ const getTicketsByStatus = async () => {
 const updateTicketStatusByTicketID = async (ticket_id, status) => {
     const command = new UpdateCommand({
         TableName: `Tickets`,
-        Key: {ticket_id},
+        Key: { ticket_id },
         UpdateExpression: `set ticket_status = :ts, update_timestamp = :ut`,
         ExpressionAttributeValues: {
             ':ts': status,

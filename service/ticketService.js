@@ -77,7 +77,7 @@ const getTicketsByUserID = async (user_id) => {
 }
 
 const getTicketsByStatus = async () => {
-    const tickets = await ticketDAO.getTicketsByUserID()
+    const tickets = await ticketDAO.getTicketsByStatus()
     if(tickets) {
         return tickets
     } else {
