@@ -54,20 +54,20 @@ router.post(`/create`, validateUserID, validateTicketData, async (req, res) => {
 router.get(`/history`, validateUserID, async (req, res) => {
     const currentUser_id = res.locals.user.userData.user_id
     const data = await ticketService.getTicketsByUserID(currentUser_id)
-    if(data) {
+    if(data.length > 0) {
         res.status(200).json({message: `Tickets available here!`, ticket: data})
     } else {
-        res.status(204).json({message: `No tickets found`})
+        res.status(200).json({message: `No tickets found`})
     }
 })
 
 //GET pending tickets (manager)
 router.get(`/history/pending`, validateUserID, validateIfManager, async (req, res) => {
     const data = await ticketService.getTicketsByStatus()
-    if(data) {
+    if(data.length > 0) {
         res.status(200).json({message: `Tickets available here!`, ticket: data})
     } else {
-        res.status(204).json({message: `No tickets found`})
+        res.status(200).json({message: `No tickets found`})
     }
 })
 
