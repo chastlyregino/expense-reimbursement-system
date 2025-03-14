@@ -1,10 +1,6 @@
 const userDAO = require(`../repository/userDAO.js`)
-const uuid = require(`uuid`)
 const bcrypt = require("bcryptjs")
 
-const createNewUserObject = (username, password) => {
-    return new userDAO.User(uuid.v4(), username, password, false)
-}
 
 const validateUserData = (user) => {
     if(!user.username || !user.password) {
@@ -28,9 +24,7 @@ const createUser = async (user) => {
     const saltRounds = 10
     user.password = await bcrypt.hash(user.password, saltRounds)
 
-    const userObject = createNewUserObject(user.username, user.password)
-
-    const userCreated = await userDAO.createUser(userObject)
+    const userCreated = await userDAO.createUser(user)
         
     if(!userCreated) {
         return null
@@ -106,5 +100,4 @@ module.exports = {
     getUserByUsername,
     validateUserCredentials,
     validateUserData,
-    createNewUserObject,
 }

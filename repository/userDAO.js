@@ -1,24 +1,20 @@
 const { DynamoDBClient } = require(`@aws-sdk/client-dynamodb`)
 const { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand, UpdateCommand, GetCommand, QueryCommand } = require('@aws-sdk/lib-dynamodb')
+const uuid = require(`uuid`)
 
 const client = new DynamoDBClient({region: `us-east-1`})
 
 const documentClient = DynamoDBDocumentClient.from(client)
 
-
-class User {
-    constructor(user_id, username, password, is_manager) {
-        this.user_id = user_id,
-        this.username = username,
-        this.password = password,
-        this.is_manager = is_manager
-    }
-}
-
 const createUser = async (user) => {
     const command = new PutCommand({
         TableName: `Users`,
-        Item: user,
+        Item: {
+            user_id: uuid.v4(),
+            username: user.username,
+            password: user.password,
+            is_manager: false
+        },
     })
 
     try {
@@ -110,7 +106,6 @@ const updateUser = async (user_id) => {
 }
 
 module.exports = {
-    User,
     createUser,
     getUser,
     getUsers,
