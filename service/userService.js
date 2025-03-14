@@ -18,7 +18,7 @@ const validateUserCredentials = async (user) => {
     const existingUser = await getUserByUsername(user.username)
     
     if(existingUser && (await bcrypt.compare(user.password, existingUser.password))) {
-        return existingUser
+        return new userDAO.User(existingUser)
     } else {
         return null
     }

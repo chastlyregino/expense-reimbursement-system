@@ -12,8 +12,8 @@ const router = express.Router()
 const secretKey = `your-secret-key`
 
 //GET previous tickets (employee)
-router.post(`/history`, authenticateToken, async (req, res) => {
-    res.json({message: `Tickets available here!`, user: req.user})
+router.get(`/history`, authenticateToken, async (req, res) => {
+    res.json({message: `Tickets available here!`, user: res.locals.user})
 })
 
 module.exports = router

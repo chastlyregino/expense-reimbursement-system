@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require(`express`)
 const jwt = require('jsonwebtoken')
 const bcrypt = require("bcryptjs")
@@ -7,8 +8,7 @@ const userService = require(`../service/userService.js`)
 
 const router = express.Router()
 
-const secretKey = `your-secret-key`
-
+const secretKey = process.env.secret_key
 
 const validateUserRegistration = async (req, res, next) => {
     const user = req.body

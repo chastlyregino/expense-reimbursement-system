@@ -1,7 +1,8 @@
+require('dotenv').config()
 const jwt = require(`jsonwebtoken`)
 const { logger } = require(`../util/logger.js`)
 
-const secretKey = `your-secret-key`
+const secretKey = process.env.secret_key
 
 const authenticateToken = async (req, res, next) => {
 
@@ -13,7 +14,7 @@ const authenticateToken = async (req, res, next) => {
         res.status(403).json({message: `Forbidden Access`})
     } else {
         const user = await decodeJWT(token)
-        req.user = user // how to pass data
+        res.locals.user = user // how to pass data
         next()
     }
 }
