@@ -1,6 +1,6 @@
 const { DynamoDBClient } = require(`@aws-sdk/client-dynamodb`)
 const { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand, UpdateCommand, GetCommand, QueryCommand } = require('@aws-sdk/lib-dynamodb')
-const uuid = require(`uuid`)
+const { logger } = require(`../util/logger.js`)
 
 const client = new DynamoDBClient({region: `us-east-1`})
 
@@ -9,16 +9,12 @@ const documentClient = DynamoDBDocumentClient.from(client)
 const createUser = async (user) => {
     const command = new PutCommand({
         TableName: `Users`,
-        Item: {
-            user_id: uuid.v4(),
-            username: user.username,
-            password: user.password,
-            is_manager: false
-        },
+        Item: user,
     })
 
     try {
         await documentClient.send(command)
+        logger.info(`PUT command to database complete ${JSON.stringify(user)}`)
         return user
     } catch(err) {
         console.error(err)
@@ -33,7 +29,8 @@ const getUser = async (user_id) => {
     })
 
     try {
-        const data = await documentClient.send(command);
+        const data = await documentClient.send(command)
+        logger.info(`GET command to database complete ${JSON.stringify(data.Item)}`)
         return data.Item
     } catch(err) {
         console.error(err)
@@ -52,6 +49,7 @@ const getUserByUsername = async (username) => {
 
     try {
         const data = await documentClient.send(command)
+        logger.info(`SCAN command to database complete ${JSON.stringify(data.Items)}`)
         return data.Items
     } catch(err) {
         console.error(err)
@@ -66,6 +64,7 @@ const getUsers = async () =>{
 
     try {
         const data = await documentClient.send(command)
+        logger.info(`SCAN command to database complete ${JSON.stringify(data.Items)}`)
         return data.Items
     } catch(err) {
         console.error(err)
@@ -80,11 +79,12 @@ const deleteUser = async (user_id) => {
     })
 
     try {
-        await documentClient.send(command);
-        return user_id;
+        await documentClient.send(command)
+        logger.info(`DELETE command to database complete ${JSON.stringify(user_id)}`)
+        return user_id
     } catch(err) {
-        console.error(err);
-        return null;
+        console.error(err)
+        return null
     }
 }
 
@@ -98,6 +98,7 @@ const updateUser = async (user_id) => {
 
     try {
         await documentClient.send(command)
+        logger.info(`UPDATE command to database complete ${JSON.stringify(user_id)}`)
         return user_id
     } catch(err) {
         console.error(err)

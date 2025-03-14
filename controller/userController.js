@@ -1,8 +1,6 @@
 require('dotenv').config()
 const express = require(`express`)
 const jwt = require('jsonwebtoken')
-const bcrypt = require("bcryptjs")
-//const { logger } = require(`../util/logger.js`)
 const userService = require(`../service/userService.js`)
 
 const router = express.Router()
@@ -58,8 +56,8 @@ router.post(`/register`, validateUserData, validateUserRegistration, async (req,
 })
 
 router.post(`/login`, validateUserData, validateUserLogin, async (req, res) => {
-    // const data = await userService.createUser(req.body)
     const user = req.body
+    
     if(user){
         const token = jwt.sign(
             {
