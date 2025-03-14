@@ -1,117 +1,111 @@
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb')
+const { DynamoDBClient } = require(`@aws-sdk/client-dynamodb`)
 const { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand, UpdateCommand, GetCommand, QueryCommand } = require('@aws-sdk/lib-dynamodb')
+const uuid = require(`uuid`)
 
-const client = new DynamoDBClient({region: 'us-east-1'})
+const client = new DynamoDBClient({region: `us-east-1`})
 
 const documentClient = DynamoDBDocumentClient.from(client)
 
-
-class User {
-    constructor(user_id, username, password, is_manager) {
-        this.user_id = user_id,
-        this.username = username,
-        this.password = password,
-        this.is_manager = is_manager
-    }
-}
-
-async function createUser(user){
+const createUser = async (user) => {
     const command = new PutCommand({
-        TableName: 'Users',
-        Item: user,
+        TableName: `Users`,
+        Item: {
+            user_id: uuid.v4(),
+            username: user.username,
+            password: user.password,
+            is_manager: false
+        },
     })
 
-    try{
+    try {
         await documentClient.send(command)
         return user
-    }catch(err){
+    } catch(err) {
         console.error(err)
         return null
     }
 }
 
-async function getUser(user_id){
+const getUser = async (user_id) => {
     const command = new GetCommand({
-        TableName: 'Users',
+        TableName: `Users`,
         Key: { user_id },
     })
 
-    try{
+    try {
         const data = await documentClient.send(command);
         return data.Item
-    }catch(err){
+    } catch(err) {
         console.error(err)
         return null
     }
 }
 
-async function getUserByUsername(username){
+const getUserByUsername = async (username) => {
     const command = new ScanCommand({
-        TableName: 'Users',
-        FilterExpression: 'username = :un',
+        TableName: `Users`,
+        FilterExpression: `username = :un`,
         ExpressionAttributeValues: {
             ':un': username
         }
     })
 
-    try{
+    try {
         const data = await documentClient.send(command)
         return data.Items
-    }catch(err){
+    } catch(err) {
         console.error(err)
         return null
     }
 }
 
-async function getUsers(){
+const getUsers = async () =>{
     const command = new ScanCommand({
-        TableName: 'Users',
+        TableName: `Users`,
     })
 
-    try{
+    try {
         const data = await documentClient.send(command)
         return data.Items
-    }catch(err){
+    } catch(err) {
         console.error(err)
         return null
     }
 }
 
-async function deleteUser(user_id){
+const deleteUser = async (user_id) => {
     const command = new DeleteCommand({
-        TableName: "Users",
+        TableName: `Users`,
         Key: {user_id},
-    });
+    })
 
-    try{
+    try {
         await documentClient.send(command);
         return user_id;
-    }catch(err){
+    } catch(err) {
         console.error(err);
         return null;
     }
 }
 
-async function updateUser(user_id){
+const updateUser = async (user_id) => {
     const command = new UpdateCommand({
-        TableName: 'Users',
+        TableName: `Users`,
         Key: {user_id},
-        UpdateExpression: "set is_manager = :i_m",
-        ExpressionAttributeValues: {":i_m": true},
+        UpdateExpression: `set is_manager = :i_m`,
+        ExpressionAttributeValues: {':i_m': true},
     })
 
-
-    try{
+    try {
         await documentClient.send(command)
         return user_id
-    }catch(err){
+    } catch(err) {
         console.error(err)
         return null
     }
 }
 
 module.exports = {
-    User,
     createUser,
     getUser,
     getUsers,
