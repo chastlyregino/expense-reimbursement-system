@@ -103,8 +103,8 @@ const updateTicketStatusByTicketID = async (ticket_id, status) => {
 
     try {
         await documentClient.send(command)
-        logger.info(`UPDATE command to database complete ${JSON.stringify(user_id)}`)
-        return user_id
+        logger.info(`UPDATE command to database complete ${JSON.stringify(ticket_id)}`)
+        return ticket_id
     } catch(err) {
         console.error(err)
         return null
