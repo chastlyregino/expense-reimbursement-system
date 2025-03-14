@@ -5,19 +5,6 @@ const client = new DynamoDBClient({region: `us-east-1`})
 
 const documentClient = DynamoDBDocumentClient.from(client)
 
-
-// class Ticket {
-//     constructor(ticket_id, user_id, amount, description, status, creation_timestamp, update_timestamp) {
-//         this.ticket_id = ticket_id,
-//         this.user_id = user_id,
-//         this.amount = amount,
-//         this.description = description,
-//         this.status = status,
-//         this.creation_timestamp = creation_timestamp,
-//         this.update_timestamp = update_timestamp
-//     }
-// }
-
 const createTicket = async (ticket) => {
     const command = new PutCommand({
         TableName: `Tickets`,
@@ -87,9 +74,9 @@ const getTicketsByUserID = async (user_id) => {
 const getTicketsByStatus = async () => {
     const command = new ScanCommand({
         TableName: `Tickets`,
-        FilterExpression: `status = :st`,
+        FilterExpression: `ticket_status = :ts`,
         ExpressionAttributeValues: {
-            ':st': `pending`,
+            ':ts': `pending`,
         }
     })
 
@@ -107,9 +94,9 @@ const updateTicketStatusByTicketID = async (ticket_id, status) => {
     const command = new UpdateCommand({
         TableName: `Tickets`,
         Key: {ticket_id},
-        UpdateExpression: `set status = :st, update_timestamp = :ut`,
+        UpdateExpression: `set ticket_status = :ts, update_timestamp = :ut`,
         ExpressionAttributeValues: {
-            ':st': status,
+            ':ts': status,
             ':ut': Date.now(),
         },
     })
