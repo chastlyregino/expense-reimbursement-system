@@ -20,6 +20,7 @@ const existingUser = {
 }
 
 describe(`Registration`, () => {
+    
     test(`Empty password`, () => {
         falsyUser.password = ``
 
