@@ -4,6 +4,7 @@ const userService = require(`./service/userService.js`)
 const userDAO = require(`./repository/userDAO.js`)
 const userController = require(`./controller/userController.js`)
 const ticketController = require(`./controller/ticketController.js`)
+const { authenticateToken } = require('./util/jwt')
 
 
 const app = express()
@@ -20,7 +21,7 @@ app.use(loggerMiddleware)
 app.use(express.json())
 
 app.use(`/users`, userController)
-app.use(`/tickets`, ticketController)
+app.use(`/tickets`, authenticateToken, ticketController)
 
 app.get(`/`, (req, res) => {
     res.send(`Home Page`)

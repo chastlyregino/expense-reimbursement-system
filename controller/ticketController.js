@@ -32,7 +32,7 @@ const validateTicketData = async (req, res, next) => {
 }
 
 //POST ticket submission
-router.post(`/create`, authenticateToken, validateUserID, validateTicketData, async (req, res) => {
+router.post(`/create`, validateUserID, validateTicketData, async (req, res) => {
     //const ticket = req.body
     const data = await ticketService.createTicket(req.body)
     //res.locals.user
@@ -43,7 +43,7 @@ router.post(`/create`, authenticateToken, validateUserID, validateTicketData, as
     }
 })
 //GET previous tickets (employee)
-router.get(`/history`, authenticateToken, validateUserID, async (req, res) => {
+router.get(`/history`, validateUserID, async (req, res) => {
     const currentUser_id = res.locals.user.userData.user_id
     const data = await ticketService.getTicketsByUserID(currentUser_id)
     res.json({message: `Tickets available here!`, user: data})
