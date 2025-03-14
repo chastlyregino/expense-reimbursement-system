@@ -22,6 +22,7 @@ const existingUser = {
 describe(`Registration`, () => {
     test(`Empty password`, () => {
         falsyUser.password = ``
+
         expect(userService.validateUserData(falsyUser)).toBeFalsy()
     })
     // test(`Invalid username - exists`, async () => {
@@ -31,9 +32,9 @@ describe(`Registration`, () => {
     // })
     test(`Successful registration`, async () => {
         const user = await userService.getUserByUsername(truthyUser)
-        console.log(user) //undefined
+
         expect(user).toBeFalsy()
-        expect(userService.createUser(user)).toBeInstanceOf(Object)
+        expect(await userService.createUser(truthyUser)).toBeInstanceOf(Object)
     })
 })
 
