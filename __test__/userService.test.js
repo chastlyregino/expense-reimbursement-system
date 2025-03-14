@@ -12,6 +12,12 @@ jest.mock(`../repository/userDAO.js`, () => {
       }
 })
 
+jest.mock(`bcryptjs`, () => ({
+    hash: jest.fn()//.mockResolvedValue(`mockedHashedPassword`),
+    //compare: jest.fn().mockResolvedValue(true), // Mock compare if needed
+}))
+
+const bcrypt = require(`bcryptjs`)
 const userService = require(`../service/userService.js`)
 const userDAO  = require(`../repository/userDAO.js`)
 
@@ -31,12 +37,10 @@ const truthyUser = {
     password: `testpassword1234`
 }
 
-const createdTruthyUser = {
-    user_id: `a165ddee-ff40-409b-bc85-adf54968075d`,
-    username:`employee1@example.com`,
-    password: `testpassword1234`,
-    is_manager: false
-}
+// const createdTruthyUser = {
+//     username:`employee1@example.com`,
+//     password: `mockedHashedPassword`,
+// }
 
 const existingUser = {
     user_id: `a165ddee-ff40-409b-bc85-adf54968075d`,
@@ -46,38 +50,36 @@ const existingUser = {
 }
 
 describe(`Registration`, () => {
-    // beforeEach(() => {
-    //     userDAO.getUserByUsername.mockImplementation(() => Promise.resolve())
-    //     userDAO.getUserByUsername.mockResolvedValue(existingUser)
-    // })
-
-    // afterEach(() => {
-    //     jest.clearAllMocks()
-    // })
-    
-    // test(`Empty password`, () => {
-    //     falsyUser.password = ``
-
-    //     expect(userService.validateUserData(falsyUser)).toBeFalsy()
-    // })
-    test(`Invalid username - exists`, async () => {
+    beforeEach(() => {
         userDAO.getUserByUsername.mockImplementation(() => Promise.resolve())
-        userDAO.getUserByUsername.mockResolvedValue(existingUser)
+        userDAO.getUserByUsername.mockResolvedValue([existingUser])
+    })
+
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+    
+    test(`Empty password`, () => {
+        falsyUser.password = ``
+        expect(userService.validateUserData(falsyUser)).toBeFalsy()
+    })
+    test(`Invalid username - exists`, async () => {
         const user = await userService.getUserByUsername(falsyUser)
         expect(user).toBeTruthy()
         expect(user).toEqual(existingUser)
     })
-    // test(`Successful registration`, async () => {
-    //     const user = await userService.getUserByUsername(truthyUser)
-    //     expect(user).toBeTruthy()
-    //     expect(user).toEqual(existingUser)
+    test(`Successful registration`, async () => {
+        const user = await userService.getUserByUsername(truthyUser)
+        expect(user).toBeTruthy()
+        expect(user).toEqual(existingUser)
 
-    //     userDAO.createUser.mockImplementation(() => Promise.resolve())
-    //     userDAO.createUser.mockResolvedValue([existingUser])
+        userDAO.createUser.mockImplementation(() => Promise.resolve())
+        userDAO.createUser.mockResolvedValue(truthyUser)
+        bcrypt.hash.mockResolvedValue(`mockedHashedPassword`)
 
-    //     const newUser = await userService.createUser(truthyUser)
-    //     expect(newUser).toEqual(createdTruthyUser)
-    // })
+        const newUser = await userService.createUser(truthyUser)
+        expect(newUser).toEqual(truthyUser)
+    })
 })
 
 describe(`Login`, () => {

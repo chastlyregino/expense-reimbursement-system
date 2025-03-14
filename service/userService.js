@@ -1,5 +1,5 @@
 const userDAO = require(`../repository/userDAO.js`)
-const bcrypt = require("bcryptjs")
+const bcrypt = require(`bcryptjs`)
 
 
 const validateUserData = (user) => {
