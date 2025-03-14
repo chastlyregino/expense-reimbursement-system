@@ -57,37 +57,6 @@ const getUserByUsername = async (username) => {
     }
 }
 
-const getUsers = async () =>{
-    const command = new ScanCommand({
-        TableName: `Users`,
-    })
-
-    try {
-        const data = await documentClient.send(command)
-        logger.info(`SCAN command to database complete ${JSON.stringify(data.Items)}`)
-        return data.Items
-    } catch(err) {
-        console.error(err)
-        return null
-    }
-}
-
-const deleteUser = async (user_id) => {
-    const command = new DeleteCommand({
-        TableName: `Users`,
-        Key: {user_id},
-    })
-
-    try {
-        await documentClient.send(command)
-        logger.info(`DELETE command to database complete ${JSON.stringify(user_id)}`)
-        return user_id
-    } catch(err) {
-        console.error(err)
-        return null
-    }
-}
-
 const updateUser = async (user_id) => {
     const command = new UpdateCommand({
         TableName: `Users`,
@@ -109,8 +78,6 @@ const updateUser = async (user_id) => {
 module.exports = {
     createUser,
     getUser,
-    getUsers,
-    deleteUser,
     updateUser,
     getUserByUsername,
 }
