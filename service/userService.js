@@ -3,10 +3,10 @@ const bcrypt = require(`bcryptjs`)
 
 
 const validateUserData = (user) => {
-    if(!user.username || !user.password) {
-        return null
+    if(user.username && user.password) {
+        return user //coverage
     } else {
-        return user
+        return null
     }
 }
 
@@ -27,7 +27,7 @@ const createUser = async (user) => {
     const userCreated = await userDAO.createUser(user)
         
     if(!userCreated) {
-        return null
+        return null //coverage
     } else {
         return userCreated
     }
@@ -45,7 +45,7 @@ const getUser = async (user_id) => {
     }{
         return null
     }
-}
+} // to test
 
 const getUserByUsername = async (username) => {
     if(username){
@@ -54,10 +54,10 @@ const getUserByUsername = async (username) => {
             //console.log(user[0])
             return user[0]
         }else{
-            return null
+            return null //coverage
         }
-    }{
-        return null
+    } else {
+        return null //coverage
     }
 }
 
@@ -65,11 +65,11 @@ const getUsers = async () => {
     const user = await userDAO.getUsers()
 
     if(!user) {
-        return {message: `Failed to get users`}
+        return null
     } else {
         return user
     }
-}
+} // to test
 
 const deleteUser = async (user_id) => {
     const user = await userDAO.deleteUser(user_id)
@@ -89,7 +89,7 @@ const updateUser = async (user_id) => {
     } else {
         return {message: `User updates`, result}
     }
-}
+} // to test
 
 module.exports = {
     createUser,

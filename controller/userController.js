@@ -3,7 +3,6 @@ const express = require(`express`)
 const jwt = require('jsonwebtoken')
 const bcrypt = require("bcryptjs")
 //const { logger } = require(`../util/logger.js`)
-const { authenticateToken } = require('../util/jwt')
 const userService = require(`../service/userService.js`)
 
 const router = express.Router()
@@ -27,24 +26,28 @@ const validateUserRegistration = async (req, res, next) => {
     
 }
 
-const validateUserLogin = async (req, res, next) => {
+const validateUserData = async (req, res, next) => {
     const user = req.body
 
     if(!userService.validateUserData(user)) {
         res.status(400).json({message: `Invalid username or password`, data: user})
     } else {
-        const data = await userService.validateUserCredentials(user)
-
-        if(data) {
-            next()
-        } else {
-            res.status(400).json({message: `Invalid Login!`, data: user})
-        }
+        next()
     }
     
 }
 
-router.post(`/register`, validateUserRegistration, async (req, res) => {
+const validateUserLogin = async (req, res, next) => {
+    const user = await userService.validateUserCredentials(req.body)
+    if(user) {
+        next()
+    } else {
+            res.status(400).json({message: `Invalid Login!`, data: user})
+    }
+    
+}
+
+router.post(`/register`, validateUserData, validateUserRegistration, async (req, res) => {
     const data = await userService.createUser(req.body)
 
     if(data){
@@ -54,7 +57,7 @@ router.post(`/register`, validateUserRegistration, async (req, res) => {
     }
 })
 
-router.post(`/login`, validateUserLogin, async (req, res) => {
+router.post(`/login`, validateUserData, validateUserLogin, async (req, res) => {
     // const data = await userService.createUser(req.body)
     const user = req.body
     if(user){
