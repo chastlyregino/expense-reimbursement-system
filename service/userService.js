@@ -44,7 +44,6 @@ const getUserByUsername = async (username) => {
     if(username){
         const user = await userDAO.getUserByUsername(username)
         if(user){
-            //console.log(user[0])
             return user[0]
         }else{
             return null //coverage
