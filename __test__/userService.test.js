@@ -2,8 +2,6 @@ jest.mock(`../repository/userDAO.js`, () => {
     return {
         createUser: jest.fn(),
         getUser: jest.fn(),
-        getUsers: jest.fn(),
-        deleteUser: jest.fn(),
         updateUser: jest.fn(),
         getUserByUsername: jest.fn(),
         // Add other DAO functions as needed
