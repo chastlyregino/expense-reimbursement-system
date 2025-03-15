@@ -39,29 +39,29 @@ const createTicket = async (ticket) => {
     
 }
 
-const getTicket = async (ticket_id) => {
-    if(ticket_id){
-        const ticket = await ticketDAO.getTicket(ticket_id)
+// const getTicket = async (ticket_id) => {
+//     if(ticket_id){
+//         const ticket = await ticketDAO.getTicket(ticket_id)
 
-        if(ticket) {
-            return ticket
-        } else {
-            return null
-        }
-    } else {
-        return null
-    }
-}
+//         if(ticket) {
+//             return ticket
+//         } else {
+//             return null
+//         }
+//     } else {
+//         return null
+//     }
+// }
 
-const getTickets = async () => {
-    const user = await ticketDAO.getTickets()
+// const getTickets = async () => {
+//     const user = await ticketDAO.getTickets()
 
-    if(!user) {
-        return null
-    } else {
-        return user
-    }
-}
+//     if(!user) {
+//         return null
+//     } else {
+//         return user
+//     }
+// }
 
 const getTicketsByUserID = async (user_id) => {
     if(user_id) {
@@ -102,8 +102,8 @@ module.exports = {
     validateTicketData,
     validateUserID,
     createTicket,
-    getTicket,
-    getTickets,
+    // getTicket,
+    // getTickets,
     getTicketsByUserID,
     getTicketsByStatus,
     updateTicketStatusByTicketID
