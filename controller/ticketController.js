@@ -39,7 +39,6 @@ const validateTicketData = async (req, res, next) => {
     
 }
 
-//POST ticket submission
 router.post(`/create`, validateUserID, validateTicketData, async (req, res) => {
     //const ticket = req.body
     const data = await ticketService.createTicket(req.body)
@@ -50,7 +49,7 @@ router.post(`/create`, validateUserID, validateTicketData, async (req, res) => {
         res.status(400).json({message: `Ticket not created`, ticket: req.body})
     }
 })
-//GET previous tickets (employee)
+
 router.get(`/history`, validateUserID, async (req, res) => {
     const currentUser_id = res.locals.user.userData.user_id
     const data = await ticketService.getTicketsByUserID(currentUser_id)
@@ -61,7 +60,6 @@ router.get(`/history`, validateUserID, async (req, res) => {
     }
 })
 
-//GET pending tickets (manager)
 router.get(`/history/pending`, validateUserID, validateIfManager, async (req, res) => {
     const data = await ticketService.getTicketsByStatus()
     if(data.length > 0) {
@@ -71,7 +69,6 @@ router.get(`/history/pending`, validateUserID, validateIfManager, async (req, re
     }
 })
 
-//PUT approve/deny ticket
 router.put(`/history/pending/change-status`, validateUserID, validateIfManager, async (req, res) => {
     const ticket = req.body
     const data = await ticketService.updateTicketStatusByTicketID(ticket.ticket_id, ticket.ticket_status)
