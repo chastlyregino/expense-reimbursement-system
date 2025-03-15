@@ -40,19 +40,6 @@ const createUser = async (user) => {
     
 }
 
-const getUser = async (user_id) => {
-    if(user_id){
-        const user = await userDAO.getUser(user_id)
-        if(user){
-            return user
-        }else{
-            return null
-        }
-    } else {
-        return null
-    }
-} // to test
-
 const getUserByUsername = async (username) => {
     if(username){
         const user = await userDAO.getUserByUsername(username)
@@ -67,20 +54,19 @@ const getUserByUsername = async (username) => {
     }
 }
 
-const updateUser = async (user_id) => {
-    const user = await userDAO.updateUser(user_id)
+// const updateUser = async (user_id) => {
+//     const user = await userDAO.updateUser(user_id)
 
-    if(!user) {
-        return {message: `Failed to update user`, user_id}
-    } else {
-        return {message: `User updates`, result}
-    }
-} // to test
+//     if(!user) {
+//         return {message: `Failed to update user`, user_id}
+//     } else {
+//         return {message: `User updates`, result}
+//     }
+// } // to test
 
 module.exports = {
     createUser,
-    getUser,
-    updateUser,
+    // updateUser,
     getUserByUsername,
     validateUserCredentials,
     validateUserData,

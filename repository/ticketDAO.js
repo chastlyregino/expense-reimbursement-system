@@ -21,36 +21,36 @@ const createTicket = async (ticket) => {
     }
 }
 
-const getTicket = async (ticket_id) => {
-    const command = new GetCommand({
-        TableName: `Tickets`,
-        Key: { ticket_id },
-    })
+// const getTicket = async (ticket_id) => {
+//     const command = new GetCommand({
+//         TableName: `Tickets`,
+//         Key: { ticket_id },
+//     })
 
-    try {
-        const data = await documentClient.send(command)
-        logger.info(`GET command to database complete ${JSON.stringify(data.Item)}`)
-        return data.Item
-    } catch(err) {
-        console.error(err)
-        return null
-    }
-}
+//     try {
+//         const data = await documentClient.send(command)
+//         logger.info(`GET command to database complete ${JSON.stringify(data.Item)}`)
+//         return data.Item
+//     } catch(err) {
+//         console.error(err)
+//         return null
+//     }
+// }
 
-const getTickets = async () =>{
-    const command = new ScanCommand({
-        TableName: `Tickets`,
-    })
+// const getTickets = async () =>{
+//     const command = new ScanCommand({
+//         TableName: `Tickets`,
+//     })
 
-    try {
-        const data = await documentClient.send(command)
-        logger.info(`SCAN command to database complete ${JSON.stringify(data.Items)}`)
-        return data.Items
-    } catch(err) {
-        console.error(err)
-        return null
-    }
-}
+//     try {
+//         const data = await documentClient.send(command)
+//         logger.info(`SCAN command to database complete ${JSON.stringify(data.Items)}`)
+//         return data.Items
+//     } catch(err) {
+//         console.error(err)
+//         return null
+//     }
+// }
 
 const getTicketsByUserID = async (user_id) => {
     const command = new ScanCommand({
@@ -113,8 +113,8 @@ const updateTicketStatusByTicketID = async (ticket_id, status) => {
 
 module.exports = {
     createTicket,
-    getTicket,
-    getTickets,
+    // getTicket,
+    // getTickets,
     getTicketsByUserID,
     getTicketsByStatus,
     updateTicketStatusByTicketID
