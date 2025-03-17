@@ -110,6 +110,8 @@ describe(`Employee Ticket Handling`, () => {
 
     test(`Succesful Ticket creation`, async () => {
         const ticket = await ticketService.validateTicketData(truthyTicket)
+        expect(ticket).toBeTruthy()
+        expect(ticket).toEqual(truthyTicket)
 
         ticketDAO.createTicket.mockImplementation(() => Promise.resolve())
         ticketDAO.createTicket.mockResolvedValue(existingTicket)
@@ -154,5 +156,58 @@ describe(`Manager Ticket Handling`, () => {
         ticketDAO.getTicket.mockResolvedValue(managerTicket)
 
         expect(await ticketService.getTicket(managerTicket.ticket_id)).toEqual(managerTicket)
+    })
+})
+
+describe(`Branching coverage`, () => {
+    beforeEach(() => {
+        ticketDAO.createTicket.mockImplementation(() => Promise.resolve())
+        ticketDAO.createTicket.mockResolvedValue()
+        ticketDAO.getTicketsByStatus.mockImplementation(() => Promise.resolve())
+        ticketDAO.getTicketsByStatus.mockResolvedValue()
+        ticketDAO.getTicket.mockImplementation(() => Promise.resolve())
+        ticketDAO.getTicket.mockResolvedValue()
+        ticketDAO.getTicketsByUserID.mockImplementation(() => Promise.resolve())
+        ticketDAO.getTicketsByUserID.mockResolvedValue()
+    })
+
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
+    test(`createTicket DAO failed`, async () => {
+        const ticket = await ticketService.createTicket(truthyTicket)
+        expect(ticket).toBeNull()
+    })
+
+    test(`getTicketsByStatus DAO failed`, async () => {
+        const ticket = await ticketService.getTicketsByStatus(truthyTicket)
+        expect(ticket).toBeNull()
+    })
+
+    test(`getTicket DAO failed`, async () => {
+        let ticket = await ticketService.getTicket()
+        expect(ticket).toBeNull()
+
+        ticket = await ticketService.getTicket(truthyTicket)
+        expect(ticket).toBeNull()
+    })
+
+    test(`getTicketsByUserID DAO failed`, async () => {
+        let ticket = await ticketService.getTicketsByUserID()
+        expect(ticket).toBeNull()
+
+        ticket = await ticketService.getTicketsByUserID(truthyTicket)
+        expect(ticket).toBeNull()
+    })
+
+    test(`updateTicketStatusByTicketID DAO failed`, async () => {
+        let ticket = await ticketService.updateTicketStatusByTicketID(truthyTicket)
+        expect(ticket).toBeNull()
+
+        ticketDAO.updateTicketStatusByTicketID.mockResolvedValue()
+        
+        ticket = await ticketService.updateTicketStatusByTicketID(truthyTicket, `approved`)
+        expect(ticket).toBeNull()
     })
 })

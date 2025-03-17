@@ -14,7 +14,7 @@ const validateUserID = async (username) => {
 
 const validateTicketData = (ticket) => {
     if(ticket.user_id && ticket.amount && ticket.description) {
-        return ticket //coverage
+        return ticket
     } else {
         return null
     }
@@ -32,7 +32,7 @@ const createTicket = async (ticket) => {
     })
         
     if(!userCreated) {
-        return null //coverage
+        return null
     } else {
         return userCreated
     }
@@ -46,10 +46,10 @@ const getTicket = async (ticket_id) => {
         if(ticket) {
             return ticket
         } else {
-            return null //coverage
+            return null
         }
     } else {
-        return null //coverage
+        return null
     }
 }
 
@@ -69,10 +69,10 @@ const getTicketsByUserID = async (user_id) => {
         if(tickets){
             return tickets
         } else {
-            return null //coverage
+            return null
         }
     } else {
-        return null //coverage
+        return null
     }
 }
 
@@ -81,7 +81,7 @@ const getTicketsByStatus = async () => {
     if(tickets) {
         return tickets.sort((a, b) => a.creation_timestamp - b.creation_timestamp)
     } else {
-        return null //coverage
+        return null
     }
 }
 
@@ -91,10 +91,10 @@ const updateTicketStatusByTicketID = async (ticket_id, status) => {
         if(ticket) {
             return ticket
         } else {
-            return null //coverage
+            return null
         }
     } else {
-        return null //coverage
+        return null
     }
 }
 

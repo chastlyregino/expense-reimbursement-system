@@ -71,7 +71,11 @@ describe(`Registration`, () => {
     })
 
     test(`Successful registration`, async () => {
-        const user = await userService.getUserByUsername(truthyUser)
+        let user = await userService.validateUserData(truthyUser)
+        expect(user).toBeTruthy()
+        expect(user).toEqual(truthyUser)
+
+        user = await userService.getUserByUsername(truthyUser)
         expect(user).toBeTruthy()
         expect(user).toEqual(existingUser)
 
@@ -134,5 +138,53 @@ describe(`Change User role`, () => {
         const updatedUser = await userService.updateUser(existingUser.user_id, existingUser.is_manager)
         expect(updatedUser).toEqual(updatedEmployee)
 
+    })
+})
+
+describe(`Branching coverage`, () => {
+    beforeEach(() => {
+        userDAO.createUser.mockImplementation(() => Promise.resolve())
+        userDAO.createUser.mockResolvedValue()
+        userDAO.getUser.mockImplementation(() => Promise.resolve())
+        userDAO.getUser.mockResolvedValue()
+        userDAO.getUserByUsername.mockImplementation(() => Promise.resolve())
+        userDAO.getUserByUsername.mockResolvedValue()
+        userDAO.updateUser.mockImplementation(() => Promise.resolve())
+        userDAO.updateUser.mockResolvedValue()
+    })
+
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
+    test(`createUser DAO failed`, async () => {
+        const user = await userService.createUser(truthyUser)
+        expect(user).toBeNull()
+    })
+
+    test(`getUser DAO failed`, async () => {
+        let user = await userService.getUser()
+        expect(user).toBeNull()
+
+        user = await userService.getUser(truthyUser)
+        expect(user).toBeNull()
+    })
+
+    test(`getUserByUsername DAO failed`, async () => {
+        let user = await userService.getUserByUsername()
+        expect(user).toBeNull()
+
+        user = await userService.getUserByUsername(truthyUser)
+        expect(user).toBeNull()
+    })
+
+    test(`updateUser DAO failed`, async () => {
+        let user = await userService.updateUser(truthyUser)
+        expect(user).toBeNull()
+
+        userDAO.getUser.mockResolvedValue(existingUser)
+
+        user = await userService.updateUser(truthyUser)
+        expect(user).toBeNull()
     })
 })

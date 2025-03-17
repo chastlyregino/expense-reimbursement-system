@@ -5,7 +5,7 @@ const uuid = require(`uuid`)
 
 const validateUserData = (user) => {
     if(user.username && user.password) {
-        return user //coverage
+        return user
     } else {
         return null
     }
@@ -33,7 +33,7 @@ const createUser = async (user) => {
     })
         
     if(!userCreated) {
-        return null //coverage
+        return null
     } else {
         return userCreated
     }
@@ -47,10 +47,10 @@ const getUser = async (user_id) => {
         if(user) {
             return user
         } else {
-            return null //coverage
+            return null
         }
     } else {
-        return null //coverage
+        return null
     }
 }
 
@@ -60,10 +60,10 @@ const getUserByUsername = async (username) => {
         if(user){
             return user[0]
         }else{
-            return null //coverage
+            return null
         }
     } else {
-        return null //coverage
+        return null
     }
 }
 
@@ -74,12 +74,12 @@ const updateUser = async (user_id) => {
         const user = await userDAO.updateUser(existingUser.user_id, !existingUser.is_manager)
 
         if(!user) {
-            return null // coverage
+            return null
         } else {
             return user
         }
     } else {
-        return null //coverage
+        return null
     }
 }
 
