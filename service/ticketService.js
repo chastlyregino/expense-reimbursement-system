@@ -46,10 +46,10 @@ const getTicket = async (ticket_id) => {
         if(ticket) {
             return ticket
         } else {
-            return null
+            return null //coverage
         }
     } else {
-        return null
+        return null //coverage
     }
 }
 

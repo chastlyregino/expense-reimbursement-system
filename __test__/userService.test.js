@@ -1,7 +1,8 @@
 jest.mock(`../repository/userDAO.js`, () => {
     return {
         createUser: jest.fn(),
-        // updateUser: jest.fn(),
+        getUser: jest.fn(),
+        updateUser: jest.fn(),
         getUserByUsername: jest.fn(),
         // Add other DAO functions as needed
       }
@@ -32,6 +33,20 @@ const existingUser = {
     username:`manager1@example.com`,
     password: `testpassword1234`,
     is_manager: true
+}
+
+const existingEmployee = {
+    user_id: `3b583994-c9cd-45ea-8c9f-d78921a2e501`,
+    username:`employee1@example.com`,
+    password: `testpassword1234`,
+    is_manager: false
+}
+
+const updatedEmployee = {
+    user_id: `3b583994-c9cd-45ea-8c9f-d78921a2e501`,
+    username:`employee1@example.com`,
+    password: `testpassword1234`,
+    is_manager: false
 }
 
 describe(`Registration`, () => {
@@ -95,5 +110,29 @@ describe(`Login`, () => {
         const user = await userService.validateUserCredentials(truthyUser)
         expect(user).toBeTruthy()
         expect(user).toEqual(existingUser)
+    })
+})
+
+describe(`Change User role`, () => {
+    beforeEach(() => {
+        userDAO.getUser.mockImplementation(() => Promise.resolve())
+        userDAO.getUser.mockResolvedValue(existingEmployee)
+    })
+
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
+    test(`Update user role`, async () => {
+        const user = await userService.getUser(existingEmployee.user_id)
+        expect(user).toBeTruthy()
+        expect(user).toEqual(existingEmployee)
+
+        userDAO.updateUser.mockImplementation(() => Promise.resolve())
+        userDAO.updateUser.mockResolvedValue(updatedEmployee)
+
+        const updatedUser = await userService.updateUser(existingUser.user_id, existingUser.is_manager)
+        expect(updatedUser).toEqual(updatedEmployee)
+
     })
 })
