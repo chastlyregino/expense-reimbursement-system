@@ -79,7 +79,7 @@ const getTicketsByUserID = async (user_id) => {
 const getTicketsByStatus = async () => {
     const tickets = await ticketDAO.getTicketsByStatus()
     if(tickets) {
-        return tickets
+        return tickets.sort((a, b) => a.creation_timestamp - b.creation_timestamp)
     } else {
         return null //coverage
     }
