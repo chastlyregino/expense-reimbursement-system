@@ -39,7 +39,7 @@ const validateUserData = async (req, res, next) => {
 const validateUserInfo = async (req, res, next) => {
     const user = req.body
     const data = await userService.getUser(user.user_id)
-    
+
     if(!data) {
         res.status(400).json({message: `User not Found`, data: user})
     } else {
@@ -100,7 +100,7 @@ router.put(`/change-role`, authenticateToken, validateUserInfo, async (req, res)
             res.status(400).json({message: `User role not changed`, data: req.body})
         }
     } else {
-        res.status(400).json({message: `Can't change own role`, data: req.body})
+        res.status(403).json({message: `Can't change own role`, data: req.body})
     }
 })
 
