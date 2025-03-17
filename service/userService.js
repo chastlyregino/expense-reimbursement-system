@@ -47,10 +47,10 @@ const getUser = async (user_id) => {
         if(user) {
             return user
         } else {
-            return null
+            return null //coverage
         }
     } else {
-        return null
+        return null //coverage
     }
 }
 
@@ -74,12 +74,12 @@ const updateUser = async (user_id) => {
         const user = await userDAO.updateUser(existingUser.user_id, !existingUser.is_manager)
 
         if(!user) {
-            return null
+            return null // coverage
         } else {
             return user
         }
     } else {
-        return null
+        return null //coverage
     }
 }
 
