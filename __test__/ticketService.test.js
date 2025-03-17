@@ -8,7 +8,7 @@ jest.mock(`../repository/userDAO.js`, () => {
 jest.mock(`../repository/ticketDAO.js`, () => {
     return {
         createTicket: jest.fn(),
-        // getTicket: jest.fn(),
+        getTicket: jest.fn(),
         // getTickets: jest.fn(),
         getTicketsByUserID: jest.fn(),
         getTicketsByStatus: jest.fn(),
@@ -75,6 +75,15 @@ const approvedTicket = {
     update_timestamp: 1741991195008
 }
 
+const managerTicket = {
+    ticket_id: `3310a3cb-0139-4313-b39e-39216cda7aa6`,
+    user_id: `affb5537-acc0-487e-8f61-6605f92f7387`,
+    amount: 30,
+    description: `food`,
+    creation_timestamp: 1741990740697,
+    ticket_status: `pending`
+}
+
 describe(`Unknown User`, () => {
     test(`Unknown User - not registered username`, async () => {
         expect(await ticketService.validateUserID(unknownUser.username)).toBeFalsy()
@@ -133,10 +142,17 @@ describe(`Manager Ticket Handling`, () => {
         expect(await ticketService.getTicketsByStatus()).toEqual(existingTicket)
     })
 
-    test(`Change ticket status`, async () => {
+    test(`Change ticket status of employee`, async () => {
         ticketDAO.updateTicketStatusByTicketID.mockImplementation(() => Promise.resolve())
         ticketDAO.updateTicketStatusByTicketID.mockResolvedValue(approvedTicket)
 
         expect(await ticketService.updateTicketStatusByTicketID(existingTicket.ticket_id, `approved`)).toEqual(approvedTicket)
+    })
+
+    test(`Change own ticket status`, async () => {
+        ticketDAO.getTicket.mockImplementation(() => Promise.resolve())
+        ticketDAO.getTicket.mockResolvedValue(managerTicket)
+
+        expect(await ticketService.getTicket(managerTicket.ticket_id)).toEqual(managerTicket)
     })
 })

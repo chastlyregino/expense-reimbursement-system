@@ -39,19 +39,19 @@ const createTicket = async (ticket) => {
     
 }
 
-// const getTicket = async (ticket_id) => {
-//     if(ticket_id){
-//         const ticket = await ticketDAO.getTicket(ticket_id)
+const getTicket = async (ticket_id) => {
+    if(ticket_id){
+        const ticket = await ticketDAO.getTicket(ticket_id)
 
-//         if(ticket) {
-//             return ticket
-//         } else {
-//             return null
-//         }
-//     } else {
-//         return null
-//     }
-// }
+        if(ticket) {
+            return ticket
+        } else {
+            return null
+        }
+    } else {
+        return null
+    }
+}
 
 // const getTickets = async () => {
 //     const user = await ticketDAO.getTickets()
@@ -102,7 +102,7 @@ module.exports = {
     validateTicketData,
     validateUserID,
     createTicket,
-    // getTicket,
+    getTicket,
     // getTickets,
     getTicketsByUserID,
     getTicketsByStatus,

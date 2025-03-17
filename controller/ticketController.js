@@ -27,6 +27,19 @@ const validateIfManager = async (req, res, next) => {
     }
 }
 
+const validateTicket = async (req, res, next) => {
+    const ticket = await ticketService.getTicket(req.body.ticket_id)
+    if(ticket){
+        if(ticket.user_id != res.locals.user.userData.user_id) {
+            next()
+        } else {
+            res.status(403).json({message: `Can't update your own ticket`})
+        } 
+    } else {
+        res.status(400).json({message: `Ticket unfound!`})
+    }
+}
+
 const validateTicketData = async (req, res, next) => {
     let ticket = req.body
     ticket.user_id = res.locals.user.userData.user_id
@@ -69,14 +82,16 @@ router.get(`/history/pending`, validateUserID, validateIfManager, async (req, re
     }
 })
 
-router.put(`/history/pending/change-status`, validateUserID, validateIfManager, async (req, res) => {
+router.put(`/history/pending/change-status`, validateUserID, validateIfManager, validateTicket, async (req, res) => {
     const ticket = req.body
+
     const data = await ticketService.updateTicketStatusByTicketID(ticket.ticket_id, ticket.ticket_status)
     if(data) {
         res.status(200).json({message: `Ticket updated!`, ticket: data})
     } else {
         res.status(400).json({message: `Ticket not updated`, ticket: req.body})
     }
+    
 })
 
 module.exports = router
