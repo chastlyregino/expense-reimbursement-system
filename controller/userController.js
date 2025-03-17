@@ -38,10 +38,12 @@ const validateUserData = async (req, res, next) => {
 
 const validateUserInfo = async (req, res, next) => {
     const user = req.body
-
-    if(!userService.getUser(user.user_id)) {
+    const data = await userService.getUser(user.user_id)
+    
+    if(!data) {
         res.status(400).json({message: `User not Found`, data: user})
     } else {
+        res.locals.user.userData = data
         next()
     }
     
@@ -49,6 +51,7 @@ const validateUserInfo = async (req, res, next) => {
 
 const validateUserLogin = async (req, res, next) => {
     const user = await userService.validateUserCredentials(req.body)
+
     if(user) {
         next()
     } else {
@@ -88,8 +91,8 @@ router.post(`/login`, validateUserData, validateUserLogin, async (req, res) => {
 
 router.put(`/change-role`, authenticateToken, validateUserInfo, async (req, res) => {
     const user = req.body
-    
-    if(user){
+
+    if(user && user.user_id != res.locals.user.userData.user_id){
         const data = await userService.updateUser(user.user_id)
         if(data) {
             res.status(200).json({message: `User updated!`, data})
@@ -97,7 +100,7 @@ router.put(`/change-role`, authenticateToken, validateUserInfo, async (req, res)
             res.status(400).json({message: `User role not changed`, data: req.body})
         }
     } else {
-        res.status(400).json({message: `Invalid User information`, data: req.body})
+        res.status(400).json({message: `Can't change own role`, data: req.body})
     }
 })
 
