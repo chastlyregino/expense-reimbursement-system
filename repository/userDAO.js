@@ -22,6 +22,22 @@ const createUser = async (user) => {
     }
 }
 
+const getUser = async (user_id) => {
+    const command = new GetCommand({
+        TableName: `Users`,
+        Key: {user_id}
+    })
+    
+    try {
+        const data = await documentClient.send(command)
+        logger.info(`GET command to database complete ${JSON.stringify(data.Item)}`)
+        return data.Item
+    } catch(err) {
+        console.error(err)
+        return null
+    }
+}
+
 const getUserByUsername = async (username) => {
     const command = new ScanCommand({
         TableName: `Users`,
@@ -41,26 +57,27 @@ const getUserByUsername = async (username) => {
     }
 }
 
-// const updateUser = async (user_id) => {
-//     const command = new UpdateCommand({
-//         TableName: `Users`,
-//         Key: {user_id},
-//         UpdateExpression: `set is_manager = :i_m`,
-//         ExpressionAttributeValues: {':i_m': true},
-//     })
+const updateUser = async (user_id, is_manager) => {
+    const command = new UpdateCommand({
+        TableName: `Users`,
+        Key: {user_id},
+        UpdateExpression: `set is_manager = :i_m`,
+        ExpressionAttributeValues: {':i_m': is_manager},
+    })
 
-//     try {
-//         await documentClient.send(command)
-//         logger.info(`UPDATE command to database complete ${JSON.stringify(user_id)}`)
-//         return user_id
-//     } catch(err) {
-//         console.error(err)
-//         return null
-//     }
-// }
+    try {
+        await documentClient.send(command)
+        logger.info(`UPDATE command to database complete ${JSON.stringify(user_id)}`)
+        return user_id
+    } catch(err) {
+        console.error(err)
+        return null
+    }
+}
 
 module.exports = {
     createUser,
-    // updateUser,
+    updateUser,
+    getUser,
     getUserByUsername,
 }
