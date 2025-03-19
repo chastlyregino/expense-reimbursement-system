@@ -63,10 +63,15 @@ const getTicket = async (ticket_id) => {
 //     }
 // }
 
-const getTicketsByUserID = async (user_id) => {
+const getTicketsByUserID = async (user_id, type) => {
     if(user_id) {
         const tickets = await ticketDAO.getTicketsByUserID(user_id)
+
         if(tickets){
+            if(type) {
+                return tickets.filter((ticket) => ticket.type === type)
+            }
+
             return tickets
         } else {
             return null
