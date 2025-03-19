@@ -19,8 +19,8 @@ app.use(express.json())
 app.use(`/users`, userController)
 app.use(`/tickets`, authenticateToken, ticketController)
 
-app.get(`/`, (req, res) => {
-    res.json(`Home Page`)
+app.all(/(.*)/, (req, res) => {
+    res.status(404).json({message: `Invalid Page!`});
 })
 
 app.listen(PORT, () => {
