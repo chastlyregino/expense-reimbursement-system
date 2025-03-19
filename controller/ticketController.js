@@ -65,7 +65,8 @@ router.post(`/create`, validateUserID, validateTicketData, async (req, res) => {
 
 router.get(`/history`, validateUserID, async (req, res) => {
     const currentUser_id = res.locals.user.userData.user_id
-    const data = await ticketService.getTicketsByUserID(currentUser_id)
+    const type = req.query.type
+    const data = await ticketService.getTicketsByUserID(currentUser_id, type || null)
     if(data.length > 0) {
         res.status(200).json({message: `Tickets available here!`, ticket: data})
     } else {
