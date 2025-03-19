@@ -7,16 +7,20 @@ const router = express.Router()
 // validateUserID, validateTicketData
 
 const validateUserID = async (req, res, next) => {
-    const user = res.locals.user.username
+    if(res.locals.user) {
+        const user = res.locals.user.username
+        const data = await ticketService.validateUserID(user)
 
-    const data = await ticketService.validateUserID(user)
-
-    if(data) {
-        res.locals.user.userData = data
-        next()
+        if(data) {
+            res.locals.user.userData = data
+            next()
+        } else {
+            res.status(400).json({message: `Invalid username`, data: res.locals.user.username})
+        }
     } else {
-        res.status(400).json({message: `Invalid username`, data: res.locals.user.username})
+        res.status(403).json({message: `Forbidden Access`})
     }
+    
 }
 
 const validateIfManager = async (req, res, next) => {
