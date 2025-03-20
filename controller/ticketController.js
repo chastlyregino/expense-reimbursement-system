@@ -99,4 +99,8 @@ router.put(`/history/pending/change-status`, validateUserID, validateIfManager, 
     
 })
 
+router.all(/(.*)/, (req, res) => {
+    res.status(404).json({message: `Invalid Page!`})
+})
+
 module.exports = router

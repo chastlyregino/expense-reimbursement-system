@@ -99,4 +99,8 @@ router.put(`/change-role`, authenticateToken, validateUserInfo, async (req, res)
     }
 })
 
+router.all(/(.*)/, (req, res) => {
+    res.status(404).json({message: `Invalid Page!`})
+})
+
 module.exports = router
