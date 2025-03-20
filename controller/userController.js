@@ -10,17 +10,12 @@ const secretKey = process.env.secret_key
 
 const validateUserRegistration = async (req, res, next) => {
     const user = req.body
+    const data = await userService.getUserByUsername(user.username)
 
-    if(!userService.validateUserData(user)) {
-        res.status(400).json({message: `Invalid username or password`, data: user})
+    if(!data) {
+        next()
     } else {
-        const data = await userService.getUserByUsername(user.username)
-
-        if(!data) {
-            next()
-        } else {
-            res.status(400).json({message: `Invalid username`, data: user})
-        }
+        res.status(400).json({message: `Invalid username`, data: user})
     }
     
 }
@@ -37,8 +32,8 @@ const validateUserData = async (req, res, next) => {
 }
 
 const validateUserInfo = async (req, res, next) => {
-    const user = req.body
-    const data = await userService.getUser(user.user_id)
+    const user = res.locals.user.username
+    const data = await userService.getUserByUsername(user)
 
     if(!data) {
         res.status(400).json({message: `User not Found`, data: user})
