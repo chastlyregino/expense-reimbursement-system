@@ -20,7 +20,7 @@ app.use(`/users`, userController)
 app.use(`/tickets`, authenticateToken, ticketController)
 
 app.all(/(.*)/, (req, res) => {
-    res.status(404).json({message: `Invalid Page!`})
+    res.status(404).json({message: `Invalid Page!`});
 })
 
 app.listen(PORT, () => {
