@@ -165,7 +165,7 @@ describe(`Manager Ticket Handling`, () => {
         jest.clearAllMocks()
     })
     
-    test(`Retrieve previous tickets`, async () => {
+    test(`Retrieve previous pending tickets`, async () => {
         ticketDAO.getTicketsByStatus.mockImplementation(() => Promise.resolve())
         ticketDAO.getTicketsByStatus.mockResolvedValue(existingTicket)
 
@@ -179,7 +179,7 @@ describe(`Manager Ticket Handling`, () => {
         expect(await ticketService.updateTicketStatusByTicketID(existingTicket[0].ticket_id, `approved`)).toEqual(approvedTicket)
     })
 
-    test(`Change own ticket status`, async () => {
+    test(`Can't change own ticket status`, async () => {
         ticketDAO.getTicket.mockImplementation(() => Promise.resolve())
         ticketDAO.getTicket.mockResolvedValue(managerTicket)
 
