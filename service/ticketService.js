@@ -27,7 +27,7 @@ const createTicket = async (ticket) => {
         user_id: ticket.user_id,
         amount: ticket.amount,
         description: ticket.description,
-        ticket_status: `pending`, //creation hard coded
+        ticket_status: `pending`,
         creation_timestamp: Date.now(),
         type: ticket.type || null
     })

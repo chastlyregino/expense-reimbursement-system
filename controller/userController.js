@@ -89,6 +89,7 @@ router.put(`/change-role`, authenticateToken, validateUserInfo, async (req, res)
 
     if(user && user.user_id != res.locals.user.userData.user_id){
         const data = await userService.updateUser(user.user_id)
+        
         if(data) {
             res.status(200).json({message: `User updated!`, data})
         } else {

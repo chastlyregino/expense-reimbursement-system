@@ -4,7 +4,6 @@ const ticketService = require(`../service/ticketService.js`)
 const userService = require(`../service/userService.js`)
 
 const router = express.Router()
-// validateUserID, validateTicketData
 
 const validateUserID = async (req, res, next) => {
     if(res.locals.user) {
@@ -57,9 +56,8 @@ const validateTicketData = async (req, res, next) => {
 }
 
 router.post(`/create`, validateUserID, validateTicketData, async (req, res) => {
-    //const ticket = req.body
     const data = await ticketService.createTicket(req.body)
-    //res.locals.user
+
     if(data){
         res.status(201).json({message: `Created Ticket ${JSON.stringify(req.body)}`})
     }else{
@@ -71,6 +69,7 @@ router.get(`/history`, validateUserID, async (req, res) => {
     const currentUser_id = res.locals.user.userData.user_id
     const type = req.query.type
     const data = await ticketService.getTicketsByUserID(currentUser_id, type || null)
+
     if(data.length > 0) {
         res.status(200).json({message: `Tickets available here!`, ticket: data})
     } else {
@@ -80,6 +79,7 @@ router.get(`/history`, validateUserID, async (req, res) => {
 
 router.get(`/history/pending`, validateUserID, validateIfManager, async (req, res) => {
     const data = await ticketService.getTicketsByStatus()
+    
     if(data.length > 0) {
         res.status(200).json({message: `Tickets available here!`, ticket: data})
     } else {
