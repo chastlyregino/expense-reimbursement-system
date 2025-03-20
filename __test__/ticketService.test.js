@@ -62,7 +62,28 @@ const existingTicket = [{
     amount: 30,
     description: `food`,
     creation_timestamp: 1741990740697,
-    ticket_status: `pending`
+    ticket_status: `pending`,
+    type: `food`
+}]
+
+const existingTickets = [{
+    ticket_id: `3310a3cb-0139-4313-b39e-39216cda7aa6`,
+    user_id: `a165ddee-ff40-409b-bc85-adf54968075d`,
+    amount: 30,
+    description: `food`,
+    creation_timestamp: 1741990740697,
+    ticket_status: `pending`,
+    type: `food`
+},
+{
+    ticket_id: `3310a3cb-0139-4313-b39e-39216cda7aa6`,
+    user_id: `a165ddee-ff40-409b-bc85-adf54968075d`,
+    amount: 30,
+    description: `parking`,
+    creation_timestamp: 1741990740697,
+    ticket_status: `approved`,
+    update_timestamp: 1741991195008,
+    type: `parking`
 }]
 
 const approvedTicket = {
@@ -121,9 +142,16 @@ describe(`Employee Ticket Handling`, () => {
 
     test(`Retrieve previous tickets`, async () => {
         ticketDAO.getTicketsByUserID.mockImplementation(() => Promise.resolve())
+        ticketDAO.getTicketsByUserID.mockResolvedValue(existingTickets)
+
+        expect(await ticketService.getTicketsByUserID(truthyTicket.user_id, null)).toEqual(existingTickets)
+    })
+
+    test(`Retrieve previous tickets by type`, async () => {
+        ticketDAO.getTicketsByUserID.mockImplementation(() => Promise.resolve())
         ticketDAO.getTicketsByUserID.mockResolvedValue(existingTicket)
 
-        expect(await ticketService.getTicketsByUserID(truthyTicket.user_id)).toEqual(existingTicket)
+        expect(await ticketService.getTicketsByUserID(truthyTicket.user_id, `food`)).toEqual(existingTicket)
     })
 })
 
