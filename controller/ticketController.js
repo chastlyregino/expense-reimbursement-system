@@ -1,7 +1,5 @@
 const express = require(`express`)
-const { authenticateToken } = require('../util/jwt')
 const ticketService = require(`../service/ticketService.js`)
-const userService = require(`../service/userService.js`)
 
 const router = express.Router()
 
@@ -79,7 +77,7 @@ router.get(`/history`, validateUserID, async (req, res) => {
 
 router.get(`/history/pending`, validateUserID, validateIfManager, async (req, res) => {
     const data = await ticketService.getTicketsByStatus()
-    
+
     if(data.length > 0) {
         res.status(200).json({message: `Tickets available here!`, ticket: data})
     } else {

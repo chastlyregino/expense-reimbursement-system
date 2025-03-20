@@ -1,7 +1,6 @@
 jest.mock(`../repository/userDAO.js`, () => {
     return {
         getUserByUsername: jest.fn(),
-        // Add other DAO functions as needed
       }
 })
 
@@ -13,7 +12,6 @@ jest.mock(`../repository/ticketDAO.js`, () => {
         getTicketsByUserID: jest.fn(),
         getTicketsByStatus: jest.fn(),
         updateTicketStatusByTicketID: jest.fn(),
-        // Add other DAO functions as needed
       }
 })
 
