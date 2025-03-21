@@ -49,13 +49,6 @@ User Story
 
 ## Extension Features
 
-### Frontend
-
-User Story
-As an Employee or Manager, I can access the application using a frontend website.
-
-- Using HTML, CSS, and JavaScript, create a frontend to interact with your API.
-
 ### Reimbursement Types Feature
 
 User Story
@@ -71,21 +64,3 @@ User Story
 Managers can change other users’ roles
 
 - Employee to Manager or back to Employee
-
-
-### Upload Receipts Feature
-
-User Story
-Employees can add images of receipts to their reimbursement requests
-
-- Upload and store images (in SQL or cloud storage)
-
-
-### User Accounts Feature
-
-User Story
-User Profile/Account
-
-- Track additional user information (name, address, etc.)
-- Users can edit their account
-- Users can add a profile picture
