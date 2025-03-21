@@ -99,6 +99,7 @@ const updateTicketStatusByTicketID = async (ticket_id, status) => {
             ':ts': status,
             ':ut': Date.now(),
         },
+        ConditionExpression: `attribute_not_exists(update_timestamp)`
     })
 
     try {
